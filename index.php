@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Biblioteca — Registro</title>
+    <title>Biblioteca — Iniciar sesión</title>
     <link href="./wwwroot/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./wwwroot/css/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -16,16 +16,20 @@
         --surface2: #1c2330;
         --border: #2a3444;
         --accent: #4ade80;
+        --accent-dim: #1a3d28;
         --text: #e6edf3;
         --text-muted: #7d8590;
         --text-faint: #444c56;
+        --gold: #f0c040;
       }
 
       body {
         margin: 0;
         min-height: 100vh;
         background-color: var(--bg);
-        background-image: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(74,222,128,0.07) 0%, transparent 60%);
+        background-image:
+          radial-gradient(ellipse 80% 60% at 50% -10%, rgba(74,222,128,0.07) 0%, transparent 60%),
+          linear-gradient(180deg, #0d1117 0%, #0a0f14 100%);
         font-family: 'DM Sans', sans-serif;
         display: flex;
         align-items: center;
@@ -37,7 +41,7 @@
         display: flex;
         width: 100%;
         max-width: 860px;
-        min-height: 560px;
+        min-height: 520px;
         border-radius: 20px;
         overflow: hidden;
         border: 1px solid var(--border);
@@ -82,18 +86,18 @@
         text-transform: uppercase;
       }
 
-      .bib-side-deco {
-        width: 40px; height: 2px;
-        background: var(--accent);
-        margin: 1.5rem 0;
-        opacity: 0.4;
-      }
-
       .bib-side-footer {
         font-size: 11px;
         color: rgba(74,222,128,0.3);
         letter-spacing: 1px;
         line-height: 1.8;
+      }
+
+      .bib-side-deco {
+        width: 40px; height: 2px;
+        background: var(--accent);
+        margin: 1.5rem 0;
+        opacity: 0.4;
       }
 
       .bib-card {
@@ -150,6 +154,27 @@
 
       .bib-input::placeholder { color: var(--text-faint); }
 
+      .bib-remember {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 20px;
+        margin-top: -8px;
+      }
+
+      .bib-remember input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--accent);
+        cursor: pointer;
+      }
+
+      .bib-remember label {
+        font-size: 13px;
+        color: var(--text-muted);
+        cursor: pointer;
+      }
+
       .bib-btn {
         width: 100%;
         background: var(--accent);
@@ -163,11 +188,11 @@
         letter-spacing: 2px;
         text-transform: uppercase;
         cursor: pointer;
-        margin-top: 4px;
         transition: background 0.2s, transform 0.1s;
       }
 
       .bib-btn:hover { background: #6ee7a0; transform: translateY(-1px); }
+      .bib-btn:active { transform: translateY(0); }
 
       .bib-footer {
         text-align: center;
@@ -184,6 +209,16 @@
 
       .bib-footer a:hover { text-decoration: underline; }
 
+      .bib-error {
+        background: rgba(248,113,113,0.1);
+        border: 1px solid rgba(248,113,113,0.3);
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 13px;
+        color: #fca5a5;
+        margin-bottom: 16px;
+      }
+
       @media (max-width: 640px) {
         .bib-side { display: none; }
         .bib-wrap { max-width: 420px; }
@@ -195,11 +230,11 @@
     <div class="bib-wrap">
       <div class="bib-side">
         <div>
-          <p class="bib-side-sub">Únete a la</p>
+          <p class="bib-side-sub">Sistema de</p>
           <h2 class="bib-side-title">Gestión<br>Biblio&shy;teca</h2>
           <div class="bib-side-deco"></div>
           <p style="color:rgba(74,222,128,0.45);font-size:13px;line-height:1.7;font-weight:300;">
-            Crea tu cuenta y empieza a explorar el catálogo de libros disponibles.
+            Administra autores, libros y préstamos desde un solo lugar.
           </p>
         </div>
         <div class="bib-side-footer">
@@ -209,24 +244,30 @@
       </div>
 
       <div class="bib-card">
-        <h1 class="bib-title">Crear cuenta</h1>
-        <p class="bib-subtitle">Únete ahora</p>
+        <h1 class="bib-title">Iniciar sesión</h1>
+        <p class="bib-subtitle">Accede a tu cuenta de lector</p>
 
-        <form method="POST" action="usuarios.php">
-          <label class="bib-label" for="nombre">Nombre completo</label>
-          <input class="bib-input" type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
-
+        <form method="POST" action="login.php">
           <label class="bib-label" for="email">Correo electrónico</label>
-          <input class="bib-input" type="email" id="email" name="email" placeholder="tu@correo.com" required>
+          <input class="bib-input" type="email" id="email" name="email"
+            placeholder="tu@correo.com"
+            value="<?= isset($_COOKIE['recordar_email']) ? htmlspecialchars($_COOKIE['recordar_email']) : '' ?>"
+            required>
 
           <label class="bib-label" for="pwd">Contraseña</label>
           <input class="bib-input" type="password" id="pwd" name="pwd" placeholder="••••••••" required>
 
-          <button class="bib-btn" type="submit">Registrarse</button>
+          <div class="bib-remember">
+            <input type="checkbox" id="recordar" name="recordar" value="1"
+              <?= isset($_COOKIE['recordar_email']) ? 'checked' : '' ?>>
+            <label for="recordar">Recórdame</label>
+          </div>
+
+          <button class="bib-btn" type="submit">Iniciar sesión</button>
         </form>
 
         <p class="bib-footer">
-          ¿Ya tienes cuenta? <a href="index.php">Inicia sesión</a>
+          ¿No tienes cuenta? <a href="registro.html">Crear cuenta</a>
         </p>
       </div>
     </div>
